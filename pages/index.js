@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Button, Container, Typography } from '@mui/material';
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Container,
+  Typography,
+} from '@mui/material';
 import UserForm from '../components/UserForm';
 import { useMutation } from 'react-query';
 import { GENERATE_PLAN } from '../components/UserForm/queries';
@@ -9,31 +15,30 @@ import parse from 'html-react-parser';
 const Form = () => {
   const { mutate, data, isLoading, isError } = useMutation(GENERATE_PLAN);
   return (
-    <>
-      {
-        <>
-          <Typography
-            variant="h3"
-            component={'h1'}
-            align="center"
-            gutterBottom={true}
-            style={{
-              fontWeight: 'bold',
-              background: '#121FCF',
-              background:
-                'radial-gradient(circle farthest-corner at center center, #121FCF 0%, #4785FF 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            Generate Your Workout/Meal Plan
-          </Typography>
-          <UserForm mutate={mutate} isLoading={isLoading} />
-          <br />
-          {data?.plan && parse(data.plan)}
-        </>
-      }
-    </>
+    <div style={{ padding: '20px 0' }}>
+      <Backdrop sx={{ color: '#fff', zIndex: 1 }} open={isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Typography
+        variant="h3"
+        component={'h1'}
+        align="center"
+        gutterBottom={true}
+        style={{
+          fontWeight: 'bold',
+          background: '#121FCF',
+          background:
+            'radial-gradient(circle farthest-corner at center center, #121FCF 0%, #4785FF 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        }}
+      >
+        Generate Your Workout/Meal Plan
+      </Typography>
+      <UserForm mutate={mutate} isLoading={isLoading} />
+      <br />
+      {data?.plan && parse(data.plan)}
+    </div>
   );
 };
 
