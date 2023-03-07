@@ -15,16 +15,13 @@ import { GENERATE_PLAN } from './queries';
 
 const Form = () => {
   const ref = useRef();
-  const { mutate, data, isLoading, isError, isSuccess } = useMutation(
-    GENERATE_PLAN,
-    {
-      onSuccess: () => {
-        setTimeout(() => {
-          ref.current.scrollIntoView(false);
-        }, 100);
-      },
-    }
-  );
+  const { mutate, data, isLoading, isError } = useMutation(GENERATE_PLAN, {
+    onSuccess: () => {
+      setTimeout(() => {
+        ref.current.scrollIntoView(true);
+      }, 100);
+    },
+  });
 
   return (
     <>
