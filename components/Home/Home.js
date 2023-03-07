@@ -42,7 +42,17 @@ const Form = () => {
         </Typography>
         <UserForm mutate={mutate} isLoading={isLoading} />
         <br />
-        {isError && <h1>Ooops! Got into an error. Try again.</h1>}
+        {isError && (
+          <h1
+            style={{
+              backgroundColor: 'red',
+              color: 'white',
+              display: 'inline-block',
+            }}
+          >
+            Ooops! Got into an error. Try again.
+          </h1>
+        )}
         {data?.plan && parse(data.plan)}
       </div>
     </>
