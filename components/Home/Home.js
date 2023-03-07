@@ -18,9 +18,10 @@ const Form = () => {
   const { mutate, data, isLoading, isError } = useMutation(GENERATE_PLAN, {
     onSuccess: () => {
       setTimeout(() => {
-        ref.current.scrollIntoView(true);
+        ref.current.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     },
+    retry: 1,
   });
 
   return (
