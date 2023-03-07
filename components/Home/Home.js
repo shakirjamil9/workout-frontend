@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import {
   Backdrop,
@@ -14,7 +14,18 @@ import UserForm from '../UserForm';
 import { GENERATE_PLAN } from './queries';
 
 const Form = () => {
-  const { mutate, data, isLoading, isError } = useMutation(GENERATE_PLAN);
+  const ref = useRef();
+  const { mutate, data, isLoading, isError, isSuccess } = useMutation(
+    GENERATE_PLAN,
+    {
+      onSuccess: () => {
+        setTimeout(() => {
+          ref.current.scrollIntoView(false);
+        }, 100);
+      },
+    }
+  );
+
   return (
     <>
       <Head>
@@ -24,12 +35,14 @@ const Form = () => {
         <Backdrop sx={{ color: '#fff', zIndex: 1 }} open={isLoading}>
           <CircularProgress color="inherit" />
         </Backdrop>
+
         <Typography
           variant="h3"
           component={'h1'}
           align="center"
           gutterBottom={true}
           style={{
+            marginTop: '20px',
             fontWeight: 'bold',
             background: '#121FCF',
             background:
@@ -41,58 +54,25 @@ const Form = () => {
           Generate Your Workout/Meal Plan
         </Typography>
         <UserForm mutate={mutate} isLoading={isLoading} />
+        <div ref={ref}>
+          {isError ? (
+            <h1
+              style={{
+                backgroundColor: 'red',
+                color: 'white',
+                display: 'inline-block',
+              }}
+            >
+              Ooops! Got into an error. Try again.
+            </h1>
+          ) : (
+            data?.plan && parse(data.plan)
+          )}
+        </div>
         <br />
-        {isError && (
-          <h1
-            style={{
-              backgroundColor: 'red',
-              color: 'white',
-              display: 'inline-block',
-            }}
-          >
-            Ooops! Got into an error. Try again.
-          </h1>
-        )}
-        {data?.plan && parse(data.plan)}
       </div>
     </>
   );
 };
 
 export default Form;
-
-{
-  /* <Grid item xs={12}>
-            <FormControl component={'fieldset'}>
-              <FormLabel component={'legend'}>
-                What do you need help planning?
-              </FormLabel>
-              <FormGroup onChange={handleChange}>
-                <FormControlLabel
-                  value="Breakfast"
-                  control={<Checkbox name="Breakfast" />}
-                  label="Breakfast"
-                  labelPlacement="left"
-                />
-                <FormControlLabel
-                  value="Lunch"
-                  control={<Checkbox name="Lunch" />}
-                  label="Lunch"
-                  labelPlacement="left"
-                />
-                <FormControlLabel
-                  value="Dinner"
-                  control={<Checkbox name="Dinner" />}
-                  label="Dinner"
-                  labelPlacement="left"
-                />
-                <FormControlLabel
-                  value="Snacks"
-                  control={<Checkbox name="Snacks" />}
-                  label="Snacks"
-                  labelPlacement="left"
-                />
-              </FormGroup>
-            </FormControl>
-          </Grid> */
-}
